@@ -14,16 +14,45 @@
     <style>
         .a {
             color: aqua;
+            display: flex;
+        }
+        
+        .b {
+            background-color: blueviolet;
         }
     </style>
-    <div id="elem" class="smiling">qwerty
-    </div>
-    <div id="elem" class="q">qwerty
-    </div>
-    <script>
-        $('.smiling').addClass('a');
-    </script>
-</body>
+    <p id="elem" class='a'>qwerty
+        <span>
+            qwer
+        </span>
+    </p>
+    <!-- <p id="elem" about="hi" class="a">qwerty</p> -->
 
+</body>
+<script>
+    $('p').css(
+        'color', "red"
+    );
+    // $('p').attr({
+    //     alt: "Beijing Brush Seller",
+    //     title: "photo by Kelly Clark"
+    // });
+    // $('p').append(() => {
+    //     return '<p>insert</p>'
+    // });
+    // alert($('p').attr('about'));
+    // $('p').attr('about', () => {
+    //     return 'goodbye';
+    // });
+    // alert($('p').attr('about'));
+    // $('p').attr('about', 'hello once again');
+    // alert($('p').attr('about'));
+    // $('p').addClass('a b');
+    //$('p').removeClass('a');
+    //alert(document.getElementsByTagName('p')[0].classList);
+    // $('p').removeClass('a');
+    // $('p').attr('about', 'goodbye');
+    // alert($('p').attr('about'));
+</script>
 
 </html>
