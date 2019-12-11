@@ -70,31 +70,33 @@ var $ = (function() {
     }
 
     Constructor.prototype.text = function() {
-        // if (arguments.length == 0) {
-        //     let result;
-        //     this.each(function(item) {
-        //         for (var el in item.querySelector(" ")) {
-        //             result.push(el.innerHTML);
-        //         }
-        //     });
-        //     return result;
-        // } else if (arguments.length == 1) {
-        //     if ((typeof arguments[0]) == 'string') {
-        //         //alert(typeof className);
-        //         this.each(function(item) {
-        //             for (var el in item.querySelector('')) {
-        //                 el.innerHTML = arguments[0];
-        //             }
-        //         });
-        //     } else if ((typeof arguments[0]) == 'function') {
-        //         //alert(typeof className);
-        //         this.each(function(item) {
-        //             for (var el in item.querySelector('')) {
-        //                 el.innerHTML = arguments[0]();
-        //             }
-        //         });
-        //     }
-        // }
+        const value = arguments[0];
+        if (arguments.length == 0) {
+            let result = new String();
+            this.each(function(item) {
+                const descendants = item.getElementsByTagName('*');
+                for (let i = 0; i < descendants.length; i++) {
+                    result += String(descendants[i].innerHTML + " ");
+                }
+            });
+            return result;
+        } else if (arguments.length == 1) {
+            if ((typeof value) == 'string') {
+                this.each(function(item) {
+                    const descendants = item.getElementsByTagName('*');
+                    for (let i = 0; i < descendants.length; i++) {
+                        descendants[i].innerHTML = value;
+                    }
+                });
+            } else if ((typeof value) == 'function') {
+                this.each(function(item) {
+                    const descendants = item.getElementsByTagName('*');
+                    for (let i = 0; i < descendants.length; i++) {
+                        descendants[i].innerHTML = value();
+                    }
+                });
+            }
+        }
     }
 
     Constructor.prototype.append = function(elementName) {
@@ -160,8 +162,9 @@ var $ = (function() {
     Constructor.prototype.children = function() {
         const children = new Array();
         this.each(function(item) {
-            for (let i = 0; i < item.childNodes.length; i++) {
-                children.push(item.childNodes[i].nodeName);
+            const childrenNodes = item.childNodes;
+            for (let i = 0; i < childrenNodes.length; i++) {
+                children.push(childrenNodes[i].nodeName);
             }
         });
         return children;
