@@ -30,14 +30,14 @@ var $ = (function() {
             classes = className.split(' ');
             this.each(function(item) {
                 for (let i = 0; i < classes.length; i++) {
-                    item.classList.add(classes[i]);
+                    addClass(classes, item);
                 }
             });
         } else if ((typeof className) == 'function') {
             classes = className().split(' ');
             this.each(function(item) {
                 for (let i = 0; i < classes.length; i++) {
-                    item.classList.add(classes[i]);
+                    addClass(classes, item);
                 }
             });
         }
@@ -49,21 +49,20 @@ var $ = (function() {
             classes = className.split(' ');
             this.each(function(item) {
                 for (let i = 0; i < classes.length; i++) {
-                    item.classList.remove(classes[i]);
+                    removeClass(classes[i], item);
                 }
             });
         } else if ((typeof className) == 'function') {
             classes = className().split(' ');
             this.each(function(item) {
                 for (let i = 0; i < classes.length; i++) {
-                    item.classList.remove(classes[i]);
+                    removeClass(classes, item);
                 }
             });
         }
     };
 
     Constructor.prototype.click = function(callback) {
-        alert("click");
         this.each(function(item) {
             item.onclick = callback;
         });
@@ -83,17 +82,11 @@ var $ = (function() {
         } else if (arguments.length == 1) {
             if ((typeof value) == 'string') {
                 this.each(function(item) {
-                    const descendants = item.getElementsByTagName('*');
-                    for (let i = 0; i < descendants.length; i++) {
-                        descendants[i].innerHTML = value;
-                    }
+                    item.innerHTML = value;
                 });
             } else if ((typeof value) == 'function') {
                 this.each(function(item) {
-                    const descendants = item.getElementsByTagName('*');
-                    for (let i = 0; i < descendants.length; i++) {
-                        descendants[i].innerHTML = value();
-                    }
+                    item.innerHTML = value();
                 });
             }
         }
@@ -162,9 +155,9 @@ var $ = (function() {
     Constructor.prototype.children = function() {
         const children = new Array();
         this.each(function(item) {
-            const childrenNodes = item.childNodes;
+            const childrenNodes = item.children;
             for (let i = 0; i < childrenNodes.length; i++) {
-                children.push(childrenNodes[i].nodeName);
+                children.push(childrenNodes[i]);
             }
         });
         return children;
@@ -174,48 +167,27 @@ var $ = (function() {
         const propName = arguments[0];
         const propValue = arguments[1];
         const properties = new Array();
-        let styles;
         if (arguments.length == 1) {
             if ((typeof propName) == 'string') {
                 this.each(function(item) {
-                    styles = getComputedStyle(item);
-                    for (let x in styles) {
-                        if (x == propName) {
-                            properties.push(styles[x]);
-                        }
-                    }
+                    getStyle(item, propName, properties);
                 });
                 return properties;
             } else if ((typeof propName) == 'object') {
                 this.each(function(item) {
                     for (let key in propName) {
-                        styles = item.style;
-                        for (var x in styles) {
-                            if (x == key) {
-                                styles[x] = propName[key];
-                            }
-                        }
+                        setStyle(item, key, propName[key]);
                     }
                 });
             }
         } else if (arguments.length == 2) {
             if ((typeof propValue) == 'function') {
                 this.each(function(item) {
-                    styles = item.style;
-                    for (var x in styles) {
-                        if (x == propName) {
-                            styles[x] = propValue();
-                        }
-                    }
+                    setStyle(item, propName, propValue());
                 });
             } else if ((typeof propValue) == 'string') {
                 this.each(function(item) {
-                    styles = item.style;
-                    for (var x in styles) {
-                        if (x == propName) {
-                            styles[x] = propValue;
-                        }
-                    }
+                    setStyle(item, propName, propValue);
                 });
             }
         }
@@ -229,3 +201,34 @@ var $ = (function() {
 
     return instantiate;
 })();
+
+
+function getStyle(item, propName, properties) {
+    const styles = getComputedStyle(item);
+    for (let x in styles) {
+        if (x == propName) {
+            properties.push(styles[x]);
+        }
+    }
+}
+
+function setStyle(item, propName, propValue) {
+    let styles = item.style;
+    for (var x in styles) {
+        if (x == propName) {
+            styles[x] = propValue;
+        }
+    }
+}
+
+function removeClass(classes, item) {
+    for (let i = 0; i < classes.length; i++) {
+        item.classList.remove(classes[i]);
+    }
+}
+
+function addClass(classes, item) {
+    for (let i = 0; i < classes.length; i++) {
+        item.classList.add(classes[i]);
+    }
+}

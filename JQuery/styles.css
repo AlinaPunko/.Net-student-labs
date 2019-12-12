@@ -1,0 +1,13 @@
+.a {
+    color: red;
+    display: flex;
+    justify-content: space-around;
+}
+
+.b {
+    background-color: blueviolet;
+}
+
+.test {
+    display: block;
+}
