@@ -1,5 +1,6 @@
-import { attrFunction } from './attr.js';
 var $ = (function() {
+
+    'use strict';
 
     var Constructor = function(selector) {
         if (selector === 'document') {
@@ -15,19 +16,18 @@ var $ = (function() {
         return new Constructor(selector);
     };
 
-    Constructor.prototype.each = function(callback) {
-        if (!callback || typeof callback !== 'function')
-            return;
-        this.elems.forEach(function(item, index) {
-            callback(item, index);
-        })
-    };
-    let addClassFunction = function(className) {
+    // Constructor.prototype.each = function(callback) {
+    //     if (!callback || typeof callback !== 'function')
+    //         return;
+    //     this.elems.forEach(function(item, index) {
+    //         callback(item, index);
+    //     })
+    // };
+    var addClassFunction = function(className) {
         let classes;
         if ((typeof className) == "string") {
             classes = className.split(' ');
             this.each(function(element) {
-
                 classes.forEach(function(item) {
                     addClass(item, element);
                 })
@@ -77,11 +77,11 @@ var $ = (function() {
         const value = arguments[0];
         if (arguments.length == 0) {
             let result = new String();
-            this.each(function(element) {
-                const descendants = element.getElementsByTagName('*');
-                Array.from(descendants).forEach(function(item) {
-                    result += String(item.innerHTML + " ");
-                });
+            this.each(function(item) {
+                const descendants = item.getElementsByTagName('*');
+                for (let i = 0; i < descendants.length; i++) {
+                    result += String(descendants[i].innerHTML + " ");
+                }
             });
             return result;
         } else if (arguments.length == 1) {
@@ -129,7 +129,7 @@ var $ = (function() {
 
     Constructor.prototype.remove = removeFunction;
 
-    let attrFunction = function() {
+    var attrFunction = function() {
         const attrName = arguments[0];
         const attrValue = arguments[1];
         const attributes = new Array();
@@ -161,7 +161,9 @@ var $ = (function() {
             }
         }
     }
+
     Constructor.prototype.attr = attrFunction;
+
     var childrenFunction = function() {
         const children = new Array();
         this.each(function(item) {
@@ -212,7 +214,7 @@ var $ = (function() {
 
     return instantiate;
 })();
-export default $;
+
 
 function getStyle(item, propName, properties) {
     const styles = getComputedStyle(item);
@@ -233,13 +235,13 @@ function setStyle(item, propName, propValue) {
 }
 
 function removeClass(classes, element) {
-    Array.from(classes).forEach(function(item) {
+    classes.forEach((item) => {
         element.classList.remove(item);
     })
 }
 
 function addClass(classes, element) {
-    Array.from(classes).forEach(function(item) {
+    classes.forEach((item) => {
         element.classList.add(item);
     })
 }

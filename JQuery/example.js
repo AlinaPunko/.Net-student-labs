@@ -1,7 +1,7 @@
 var testClasses = function() {
     $('#list').addClass('a b');
     setTimeout(() => {
-        $('#list').removeClass(() => { return 'a b'; });
+        $('#list').removeClass(() => { return 'b'; });
     }, 2000);
 }
 
