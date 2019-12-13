@@ -208,9 +208,9 @@ let $ = (function() {
     JQuery.prototype.css = cssFunction;
 
     let emptyFunction = function() {
-        this.each(function(item) {
-            item.innerHTML = '';
-        });
+        this.each((item) => {
+            item.innerHTML = "";
+        })
     }
 
     JQuery.prototype.empty = emptyFunction;
@@ -230,6 +230,29 @@ let $ = (function() {
 
     JQuery.prototype.wrap = wrapFunction;
 
+    //don't check
+    let toggleFunction = function() {
+        if (arguments.length == 0) {
+            this.each((item) => {
+                item.setAttribute('display', window.getComputedStyle(item).display)
+                if (window.getComputedStyle(item).display == 'none')
+                    item.style.display = item.getAttribute('display');
+                else if (item.getAttribute('display') == 'none')
+                    item.style.display = "initial";
+                else if (item.getAttribute('display') != 'none')
+                    item.style.display = "none";
+            });
+        } else if (arguments.length == 1 && typeof arguments[0] == 'boolean') {
+            const flag = arguments[0];
+            this.each((item) => {
+                if (flag == true)
+                    item.style.visibility = "visible";
+                else item.style.visibility = "hidden";
+            });
+        }
+    }
+
+    JQuery.prototype.toggle = toggleFunction;
     return instantiate;
 })();
 

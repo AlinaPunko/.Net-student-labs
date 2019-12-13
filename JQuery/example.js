@@ -42,10 +42,10 @@ var testAppend = function() {
         return '<li id="#inserted">insert</li>'
     });
     setTimeout(() => {
-        $('#list').remove('.li2');
+        $('#list').remove('.li1');
     }, 2000);
 }
 
 var testWrap = function() {
-    $('.wrapped-element').wrap('<div class="wrapping-element"> </div>');
+    $('.wrapped-element').wrap('<div class="wrapping-element">Wrapping </div>');
 }
