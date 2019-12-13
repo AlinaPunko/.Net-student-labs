@@ -7,3 +7,13 @@
 .b {
     background-color: blueviolet;
 }
+
+.wrapped-element {
+    background-color: yellow;
+    width: 200px;
+}
+
+.wrapping-element {
+    border: 1px red solid;
+    height: 50px;
+}

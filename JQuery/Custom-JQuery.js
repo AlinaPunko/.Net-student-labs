@@ -1,7 +1,6 @@
-import { attrFunction } from './attr.js';
-var $ = (function() {
+let $ = (function() {
 
-    var Constructor = function(selector) {
+    let JQuery = function(selector) {
         if (selector === 'document') {
             this.elems = [document];
         } else if (selector === 'window') {
@@ -11,123 +10,122 @@ var $ = (function() {
         }
     };
 
-    var instantiate = function(selector) {
-        return new Constructor(selector);
+    let instantiate = function(selector) {
+        return new JQuery(selector);
     };
 
-    Constructor.prototype.each = function(callback) {
+    JQuery.prototype.each = function(callback) {
         if (!callback || typeof callback !== 'function')
             return;
-        this.elems.forEach(function(item, index) {
+        this.elems.forEach((item, index) => {
             callback(item, index);
         })
     };
+
     let addClassFunction = function(className) {
         let classes;
         if ((typeof className) == "string") {
             classes = className.split(' ');
-            this.each(function(element) {
-
-                classes.forEach(function(item) {
+            this.each((element) => {
+                classes.forEach((item) => {
                     addClass(item, element);
                 })
             });
         } else if ((typeof className) == "function") {
             classes = className().split(' ');
-            each(function(element) {
-                this.classes.forEach(function(item) {
+            each((element) => {
+                this.classes.forEach((item) => {
                     addClass(item, element);
                 })
             });
         }
     };
 
-    Constructor.prototype.addClass = addClassFunction;
+    JQuery.prototype.addClass = addClassFunction;
 
-
-    var removeClassFunction = function(className) {
+    let removeClassFunction = function(className) {
         let classes;
         if ((typeof className) == 'string') {
             classes = className.split(' ');
-            this.each(function(element) {
-                classes.forEach(function(item) {
+            this.each((element) => {
+                classes.forEach((item) => {
                     removeClass(item, element);
                 })
             });
         } else if ((typeof className) == 'function') {
             classes = className().split(' ');
-            this.each(function(element) {
-                classes.forEach(function(item) {
+            this.each((element) => {
+                classes.forEach((item) => {
                     removeClass(item, element);
                 })
             });
         }
     };
 
-    Constructor.prototype.removeClass = removeClassFunction;
+    JQuery.prototype.removeClass = removeClassFunction;
 
-    var clickFunction = function(callback) {
-        this.each(function(item) {
+    let clickFunction = function(callback) {
+        this.each((item) => {
             item.onclick = callback;
         });
     }
-    Constructor.prototype.click = clickFunction;
+    JQuery.prototype.click = clickFunction;
 
-    var textFunction = function() {
+    let textFunction = function() {
         const value = arguments[0];
         if (arguments.length == 0) {
             let result = new String();
-            this.each(function(element) {
+            this.each((element) => {
                 const descendants = element.getElementsByTagName('*');
-                Array.from(descendants).forEach(function(item) {
+                Array.from(descendants).forEach((item) => {
                     result += String(item.innerHTML + " ");
                 });
             });
             return result;
         } else if (arguments.length == 1) {
             if ((typeof value) == 'string') {
-                this.each(function(item) {
+                this.each((item) => {
                     item.innerHTML = value;
                 });
             } else if ((typeof value) == 'function') {
-                this.each(function(item) {
+                this.each((item) => {
                     item.innerHTML = value();
                 });
             }
         }
     }
 
-    Constructor.prototype.text = textFunction;
+    JQuery.prototype.text = textFunction;
 
-    var appendFunction = function(elementName) {
+    let appendFunction = function(elementName) {
         if (typeof elementName == 'string') {
-            this.each(function(item) {
+            this.each((item) => {
                 item.insertAdjacentHTML('beforeend', elementName);
             });
         } else if (typeof elementName == 'function') {
-            this.each(function(item) {
+            this.each((item) => {
                 item.insertAdjacentHTML('beforeend', elementName());
             });
         }
     }
 
-    Constructor.prototype.append = appendFunction;
+    JQuery.prototype.append = appendFunction;
 
-    var removeFunction = function() {
+    let removeFunction = function() {
         const selector = arguments[0];
         if (arguments.length == 0) {
-            this.each(function(item) {
+            this.each((item) => {
                 item.remove();
             });
         } else if (arguments.length == 1) {
-            this.each(function(item) {
+            this.each((item) => {
                 let elem = document.querySelector(selector);
                 item.removeChild(elem);
             });
         }
     }
 
-    Constructor.prototype.remove = removeFunction;
+    JQuery.prototype.remove = removeFunction;
 
     let attrFunction = function() {
         const attrName = arguments[0];
@@ -135,12 +133,12 @@ var $ = (function() {
         const attributes = new Array();
         if (arguments.length == 1) {
             if ((typeof attrName) == 'string') {
-                this.each(function(item) {
+                this.each((item) => {
                     attributes.push(item.getAttribute(attrName));
                 });
                 return attributes;
             } else if ((typeof attrName) == 'object') {
-                this.each(function(item) {
+                this.each((item) => {
                     for (let key in attrName) {
                         if (item.hasAttribute(key))
                             item.setAttribute(key, attrName[key]);
@@ -149,22 +147,24 @@ var $ = (function() {
             }
         } else if (arguments.length == 2) {
             if ((typeof attrValue) == 'function') {
-                this.each(function(item) {
+                this.each((item) => {
                     if (item.hasAttribute(attrName))
                         item.setAttribute(attrName, attrValue());
                 });
             } else if ((typeof attrValue) == 'string') {
-                this.each(function(item) {
+                this.each((item) => {
                     if (item.hasAttribute(attrName))
                         item.setAttribute(attrName, attrValue);
                 });
             }
         }
     }
-    Constructor.prototype.attr = attrFunction;
-    var childrenFunction = function() {
+
+    JQuery.prototype.attr = attrFunction;
+
+    let childrenFunction = function() {
         const children = new Array();
-        this.each(function(item) {
+        this.each((item) => {
             const childrenNodes = item.children;
             for (let i = 0; i < childrenNodes.length; i++) {
                 children.push(childrenNodes[i]);
@@ -172,19 +172,21 @@ var $ = (function() {
         });
         return children;
     }
-    Constructor.prototype.children = childrenFunction;
-    var cssFunction = function() {
+
+    JQuery.prototype.children = childrenFunction;
+
+    let cssFunction = function() {
         const propName = arguments[0];
         const propValue = arguments[1];
         const properties = new Array();
         if (arguments.length == 1) {
             if ((typeof propName) == 'string') {
-                this.each(function(item) {
+                this.each((item) => {
                     getStyle(item, propName, properties);
                 });
                 return properties;
             } else if ((typeof propName) == 'object') {
-                this.each(function(item) {
+                this.each((item) => {
                     for (let key in propName) {
                         setStyle(item, key, propName[key]);
                     }
@@ -192,27 +194,50 @@ var $ = (function() {
             }
         } else if (arguments.length == 2) {
             if ((typeof propValue) == 'function') {
-                this.each(function(item) {
+                this.each((item) => {
                     setStyle(item, propName, propValue());
                 });
             } else if ((typeof propValue) == 'string') {
-                this.each(function(item) {
+                this.each((item) => {
                     setStyle(item, propName, propValue);
                 });
             }
         }
     }
-    Constructor.prototype.css = cssFunction;
-    var emptyFunction = function() {
+
+    JQuery.prototype.css = cssFunction;
+
+    let emptyFunction = function() {
         this.each(function(item) {
             item.innerHTML = '';
         });
     }
-    Constructor.prototype.empty = emptyFunction;
+
+    JQuery.prototype.empty = emptyFunction;
+
+    let wrapFunction = function() {
+        const wrappingElementTag = arguments[0];
+        if (typeof wrappingElementTag == 'string') {
+            this.each((item) => {
+                appendAndWrapElement(item, wrappingElementTag);
+            });
+        } else if (typeof wrappingElement == 'function') {
+            this.each((item) => {
+                appendAndWrapElement(item, wrappingElementTag());
+            });
+        }
+    }
+
+    JQuery.prototype.wrap = wrapFunction;
 
     return instantiate;
 })();
-export default $;
+
+function appendAndWrapElement(item, wrappingElementTag) {
+    item.insertAdjacentHTML('beforebegin', wrappingElementTag);
+    let wrappingElement = item.previousElementSibling;
+    wrappingElement.appendChild(item);
+}
 
 function getStyle(item, propName, properties) {
     const styles = getComputedStyle(item);
@@ -225,7 +250,7 @@ function getStyle(item, propName, properties) {
 
 function setStyle(item, propName, propValue) {
     let styles = item.style;
-    for (var x in styles) {
+    for (let x in styles) {
         if (x == propName) {
             styles[x] = propValue;
         }
@@ -233,13 +258,13 @@ function setStyle(item, propName, propValue) {
 }
 
 function removeClass(classes, element) {
-    Array.from(classes).forEach(function(item) {
+    Array.from(classes).forEach((item) => {
         element.classList.remove(item);
     })
 }
 
 function addClass(classes, element) {
-    Array.from(classes).forEach(function(item) {
+    Array.from(classes).forEach((item) => {
         element.classList.add(item);
     })
 }

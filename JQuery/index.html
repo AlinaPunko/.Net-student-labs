@@ -16,9 +16,11 @@
 
     <ul id="list" class='a' att1="someattr1" att2="someattr2">
         <li class="li1">Example1</li>
-        <li class="li1">Example2</li>
-        <li class="li1">Example3</li>
+        <li class="li2">Example2</li>
+        <li class="li2">Example3</li>
     </ul>
+
+    <div class="wrapped-element">Wrapped element</div>
     <div class='test'>
         <button onclick="testClasses()">Test classes functions</button>
         <button onclick="testAttr()">Test attributes functions</button>
@@ -26,9 +28,10 @@
         <button onclick="testChildren()">Test children function</button>
         <button onclick="testText()">Test text functions</button>
         <button onclick="testAppend()">Test append/remove function</button>
-        <button onclick="testEmpty()">Test empty function</button>
+        <button onclick="testEmpty()">Test empty function (test it at the very end)</button>
         <button onclick="testClick()">Test click function</button>
-        <button id="click_test">Click</button>
+        <button onclick="testWrap()">Test wrap function</button>
+        <button id="click_test">Click on me</button>
     </div>
     <textarea id='result' cols="50" rows="5"></textarea>
 </body>
