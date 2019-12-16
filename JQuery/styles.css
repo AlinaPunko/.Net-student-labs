@@ -1,10 +1,10 @@
-.a {
+.flex-class {
     color: red;
     display: flex;
     justify-content: space-around;
 }
 
-.b {
+.background-class {
     background-color: blueviolet;
 }
 

@@ -1,11 +1,11 @@
-var testClasses = function() {
-    $('#list').addClass('a b');
+const testClasses = function() {
+    $('#list').addClass('flex-class background-class');
     setTimeout(() => {
-        $('#list').removeClass(() => { return 'b'; });
+        $('#list').removeClass(() => { return 'background-class'; });
     }, 2000);
 }
 
-var testAttr = function() {
+const testAttr = function() {
     document.getElementById("result").value = "old value " + $('#list').attr('att1') + "\n";
     $('#list').attr({
         att1: "newattr1",
@@ -14,30 +14,30 @@ var testAttr = function() {
     document.getElementById("result").value += "new value " + $('#list').attr('att1');
 }
 
-var testCss = function() {
+const testCss = function() {
     document.getElementById("result").value = 'old value ' + $('#list').css('display') + '\n';
     $('#list').css({ display: 'inline' });
     document.getElementById("result").value += 'new value ' + $('#list').css('display');
 }
 
-var testText = function() {
+const testText = function() {
     document.getElementById("result").value = $('#list').text();
     $('#list').text('new text');
 }
 
-var testClick = function() {
+const testClick = function() {
     $('#click_test').click(() => { alert('Hello!') });
 }
 
-var testChildren = function() {
+const testChildren = function() {
     document.getElementById("result").value = $('#list').children();
 }
 
-var testEmpty = function() {
+const testEmpty = function() {
     $('#list').empty();
 }
 
-var testAppend = function() {
+const testAppend = function() {
     $('#list').append(() => {
         return '<li id="#inserted">insert</li>'
     });
@@ -46,6 +46,6 @@ var testAppend = function() {
     }, 2000);
 }
 
-var testWrap = function() {
+const testWrap = function() {
     $('.wrapped-element').wrap('<div class="wrapping-element">Wrapping </div>');
 }
