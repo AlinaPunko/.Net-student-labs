@@ -17,7 +17,8 @@ const testAttr = function() {
 const testCss = function() {
     document.getElementById("result").value = 'old value ' + $('#list').css('display') + '\n';
     $('#list').css({ display: 'inline' });
-    document.getElementById("result").value += 'new value ' + $('#list').css('display');
+    document.getElementById("result").value += 'new value ' + $('#list').css(['display', 'backgroundColor']);
+
 }
 
 const testText = function() {
@@ -27,10 +28,11 @@ const testText = function() {
 
 const testClick = function() {
     $('#click_test').click(() => { alert('Hello!') });
+    alert('Now click on the last button')
 }
 
 const testChildren = function() {
-    document.getElementById("result").value = $('#list').children();
+    document.getElementById("result").value = $('#list').children('.li2');
 }
 
 const testEmpty = function() {
@@ -42,10 +44,10 @@ const testAppend = function() {
         return '<li id="#inserted">insert</li>'
     });
     setTimeout(() => {
-        $('#list').remove('.li1');
+        $('#list').remove('.li2');
     }, 2000);
 }
 
 const testWrap = function() {
-    $('.wrapped-element').wrap('<div class="wrapping-element">Wrapping </div>');
+    $('.wrapped-element').wrap('<div class="wrapping-element">Wrapping element</div>');
 }

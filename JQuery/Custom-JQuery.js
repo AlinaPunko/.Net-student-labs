@@ -1,27 +1,27 @@
-let $ = (function() {
-    let JQuery = function(selector) {
+const $ = (function() {
+    const JQuery = function(selector) {
         switch (selector) {
             case 'document':
-                this.elememts = [document];
+                this.elements = [document];
                 return;
             case 'window':
-                this.elememts = [window];
+                this.elements = [window];
                 return;
             default:
-                this.elememts = document.querySelectorAll(selector);
+                this.elements = document.querySelectorAll(selector);
                 return;
         }
     };
 
-    let Initialize = function(selector) {
+    const Initialize = function(selector) {
         return new JQuery(selector);
     };
 
     JQuery.prototype.each = function(callback) {
-        if (!callback || typeof callback !== 'function') {
+        if (!callback || !isFunction(callback)) {
             return;
         }
-        this.elememts.forEach((item, index) => {
+        this.elements.forEach((item, index) => {
             callback(item, index);
         })
     };
@@ -30,7 +30,6 @@ let $ = (function() {
         if (!isString(className) && !isFunction(className)) {
             return;
         }
-
         const classes = isString(className) ? className.split(' ') : className().split(' ');
 
         this.each((element) => {
@@ -42,7 +41,6 @@ let $ = (function() {
         if (!isString(className) && !isFunction(className)) {
             return;
         }
-
         const classes = isString(className) ? className.split(' ') : className().split(' ');
 
         this.each((element) => {
@@ -74,13 +72,11 @@ let $ = (function() {
                 if (!isString(argument) && !isFunction(argument)) {
                     return;
                 }
-
                 const text = isString(argument) ? argument : argument();
 
                 this.each((element) => {
                     element.innerHTML = text;
                 });
-
         }
     }
 
@@ -88,11 +84,10 @@ let $ = (function() {
         if (!isString(element) && !isFunction(element)) {
             return;
         }
-
-        const text = isString(element) ? element : element();
+        const newElement = isString(element) ? element : element();
 
         this.each((item) => {
-            item.insertAdjacentHTML('beforeend', text);
+            item.insertAdjacentHTML('beforeend', newElement);
         });
     }
 
@@ -106,92 +101,113 @@ let $ = (function() {
                 const selector = arguments[0];
 
                 this.each((element) => {
-                    let elem = element.querySelector(selector);
-                    element.removeChild(elem);
+                    let selectedElement = element.querySelector(selector);
+                    element.removeChild(selectedElement);
                 });
         }
     }
 
     JQuery.prototype.attr = function() {
-            const attributes = [];
-            let argument;
-            switch (arguments.length) {
-                case 1:
-                    argument = arguments[0];
-                    if (!isString(argument) && !isObject(argument)) {
-                        return;
-                    }
-                    switch (typeof argument) {
-                        case 'string':
-                            const attributeName = argument;
-                            this.each((element) => {
-                                attributes.push(element.getAttribute(attributeName));
-                            });
-                            return attributes;
-
-                        case 'object':
-                            const attributesObject = argument;
-                            this.each((element) => {
-                                for (const key in attributesObject) {
-                                    element.setAttribute(key, attributesObject[key]);
-                                }
-                            });
-                    }
-                case 2:
-                    const attributeName = arguments[0];
-                    argument = arguments[1];
-                    if (!isString(argument) && !isFunction(argument)) {
-                        return;
-                    }
-
-                    const attributeValue = isString(argument) ? argument : argument();
-                    this.each((element) => {
-                        element.setAttribute(attributeName, attributeValue);
-                    });
-            }
-        }
-        //add parameter
-    JQuery.prototype.children = function() {
-        const children = [];
-
-        this.each((element) => {
-            const childrenNodes = element.children;
-            [...childrenNodes].forEach((child) => {
-                children.push(child);
-            })
-        });
-        return children;
-    }
-
-    //add array parameter
-    JQuery.prototype.css = function() {
-
+        const attributes = [];
         let argument;
+        let attributeName;
         switch (arguments.length) {
             case 1:
                 argument = arguments[0];
                 if (!isString(argument) && !isObject(argument)) {
                     return;
                 }
+                switch (typeof argument) {
+                    case 'string':
+                        attributeName = argument;
+                        this.each((element) => {
+                            attributes.push(element.getAttribute(attributeName));
+                        });
+                        return attributes;
+                    case 'object':
+                        const attributesObject = argument;
+                        this.each((element) => {
+                            for (const key in attributesObject) {
+                                element.setAttribute(key, attributesObject[key]);
+                            }
+                        });
+                }
+            case 2:
+                attributeName = arguments[0];
+                argument = arguments[1];
+                if (!isString(argument) && !isFunction(argument)) {
+                    return;
+                }
+                const attributeValue = isString(argument) ? argument : argument();
 
+                this.each((element) => {
+                    element.setAttribute(attributeName, attributeValue);
+                });
+        }
+    }
+
+    JQuery.prototype.children = function() {
+        const children = [];
+        switch (arguments.length) {
+            case 0:
+                this.each((element) => {
+                    const childrenNodes = element.children;
+                    [...childrenNodes].forEach((child) => {
+                        children.push(child);
+                    })
+                });
+                return children;
+            case 1:
+                this.each((element) => {
+                    const childrenElements = element.querySelectorAll(arguments[0]);
+                    for (const child of childrenElements)
+                        children.push(child);
+                });
+                return children;
+        }
+    }
+
+    JQuery.prototype.css = function() {
+        let argument;
+        switch (arguments.length) {
+            case 1:
+                argument = arguments[0];
                 const properties = [];
-
+                if (!isString(argument) && !isObject(argument)) {
+                    return;
+                }
                 switch (typeof argument) {
                     case 'string':
                         const propertyName = argument;
                         this.each((element) => {
                             const styles = getComputedStyle(element);
-                            properties.push(styles[propertyName]);
-                        });
-                        return properties;
-
-                    case 'object':
-                        const propertyObject = argument;
-                        this.each((element) => {
-                            for (let key in propertyObject) {
-                                addCssStyle(element, key, propertyObject[key]);
+                            if (styles.hasOwnProperty(propertyName)) {
+                                properties.push(styles[propertyName]);
                             }
                         });
+                        return properties;
+                    case 'object':
+                        if (Array.isArray(argument)) {
+                            const propertyNames = argument;
+                            this.each((element) => {
+                                const styles = getComputedStyle(element);
+
+                                propertyNames.forEach((property) => {
+                                    if (styles.hasOwnProperty(property)) {
+                                        properties.push(styles[property]);
+                                    }
+                                })
+                            });
+                            return properties;
+                        } else {
+                            const propertyObject = argument;
+
+                            this.each((element) => {
+                                for (let key in propertyObject) {
+                                    addCssStyle(element, key, propertyObject[key]);
+                                }
+                            });
+                        }
                 }
             case 2:
                 const propertyName = arguments[0];
@@ -199,14 +215,13 @@ let $ = (function() {
                 if (!isString(argument) && !isFunction(argument)) {
                     return;
                 }
-
                 const propertyValue = isString(argument) ? argument : argument();
+
                 this.each((element) => {
                     addCssStyle(element, propertyName, propertyValue);
                 });
         }
     }
-
 
     JQuery.prototype.empty = function() {
         this.each((element) => {
@@ -221,7 +236,6 @@ let $ = (function() {
         if (!isString(ElementTag) && !isFunction(ElementTag)) {
             return;
         }
-
         const wrappingElementTag = isString(ElementTag) ? ElementTag : ElementTag();
 
         this.each((element) => {
@@ -229,29 +243,6 @@ let $ = (function() {
         });
     }
 
-    //don't check
-    JQuery.prototype.toggle = function() {
-        if (!arguments.length) {
-            this.each((element) => {
-                element.setAttribute('display', window.getComputedStyle(element).display)
-
-                if (window.getComputedStyle(item).display == 'none')
-                    element.style.display = item.getAttribute('display');
-                else if (item.getAttribute('display') == 'none')
-                    element.style.display = "initial";
-                else if (item.getAttribute('display') != 'none')
-                    element.style.display = "none";
-            });
-        } else if (arguments.length == 1 && typeof arguments[0] == 'boolean') {
-            const flag = arguments[0];
-
-            this.each((element) => {
-                if (flag == true)
-                    element.style.visibility = "visible";
-                else element.style.visibility = "hidden";
-            });
-        }
-    }
     return Initialize;
 
 })();
@@ -267,9 +258,11 @@ function setAttribute(attributeName, attributeValue) {
         this.setAttribute(attributeName, attributeValue);
 }
 
-function addCssStyle(item, propName, propValue) {
-    let styles = item.style;
-    styles[propName] = propValue;
+function addCssStyle(item, propertyName, propertyValue) {
+    const styles = item.style;
+    if (styles.hasOwnProperty(propertyName)) {
+        styles[propertyName] = propertyValue;
+    }
 }
 
 function isString(value) {
