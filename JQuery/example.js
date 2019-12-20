@@ -15,9 +15,9 @@ const testAttr = function() {
 }
 
 const testCss = function() {
-    document.getElementById("result").value = 'old value ' + $('#list').css('display') + '\n';
-    $('#list').css({ display: 'inline' });
-    document.getElementById("result").value += 'new value ' + $('#list').css(['display', 'backgroundColor']);
+    document.getElementById("result").value = 'old value ' + $('li').css('display') + '\n';
+    $('li').css({ display: 'none' });
+    document.getElementById("result").value += 'new value ' + $('li').css(['display', 'backgroundColor']);
 
 }
 
