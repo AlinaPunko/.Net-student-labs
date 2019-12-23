@@ -1,0 +1,19 @@
+.flex-class {
+    color: red;
+    display: flex;
+    justify-content: space-around;
+}
+
+.background-class {
+    background-color: blueviolet;
+}
+
+.wrapped-element {
+    background-color: yellow;
+    width: 200px;
+}
+
+.wrapping-element {
+    border: 1px red solid;
+    height: 50px;
+}
