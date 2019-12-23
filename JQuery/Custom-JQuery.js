@@ -51,7 +51,6 @@ const $ = (function() {
                 let result = '';
 
                 this.each((element) => {
-
                     const descendants = element.getElementsByTagName('*');
 
                     [...descendants].forEach((element) => {
@@ -87,7 +86,6 @@ const $ = (function() {
                 const selector = params[0];
 
                 this.each((element) => {
-
                     const selectedElement = element.querySelector(selector);
                     element.removeChild(selectedElement);
                 });
@@ -106,8 +104,8 @@ const $ = (function() {
 
                 if (isString(firstParameter))
                 {
-                    let attributeName=firstParameter; 
-                     
+                    const attributeName=firstParameter; 
+
                     this.each((element) => {
                         attributes.push(element.getAttribute(attributeName));
                     });
@@ -117,6 +115,7 @@ const $ = (function() {
                 const attributesDictionary = firstParameter;
 
                 this.each((element) => {
+                    
                     for (const key in attributesDictionary) {
                         element.setAttribute(key, attributesDictionary[key]);
                     }
@@ -139,19 +138,14 @@ const $ = (function() {
 
                 this.each((element) => {
                     const childrenNodes = element.children;
-
                     children.push([...childrenNodes]);
                 });
                 return children;
             case 1:
-                const childrenArray = [];
 
                 this.each((element) => {
-
                     const childrenElements = element.querySelectorAll(params[0]);
-
-                    for (const child of childrenElements)
-                        childrenArray.push(child);
+                    children.push(...childrenElements);
                 });
                 return childrenArray;
         }
@@ -162,11 +156,11 @@ const $ = (function() {
             case 1:
                 const element=this.elements[0];
                 const firstParameter = params[0];
-                const properties = [];
 
                 if (!isString(firstParameter) && !isObject(firstParameter)) {
                     return;
                 }
+
                 if(isString(firstParameter))
                 {
                     const styleName=firstParameter;
@@ -187,14 +181,14 @@ const $ = (function() {
                 const styleName = params[0];
                 const styleValue = getStringOrFunctionValue(params[1]);
 
-                addCssStyle(element, styleName, styleValue);
+                addStyle(element, styleName, styleValue);
         }
     }
 
     JQuery.prototype.empty = function() {
         this.each((element) => {
             while (element.hasChildNodes()) {
-                element.removeChild(element.childNodes[0]);
+                element.removeChild(element.firstChild);
             }
         })
     }
@@ -212,13 +206,13 @@ const $ = (function() {
 })();
 
 function addStyles(element, stylesDictionary) {
-    for (let key in stylesDictionary) {
-        addCssStyle(element, key, stylesDictionary[key]);
+    for (const key in stylesDictionary) {
+        addStyle(element, key, stylesDictionary[key]);
     }
 }
 
 function getStylesValues(element, styleNames) {
-    let stylesValues=[];
+    const stylesValues=[];
     const styles = getComputedStyle(element);
 
     styleNames.forEach((styleName) => {
@@ -234,29 +228,25 @@ function getStyleValue(element, propertyName) {
 
 function appendAndWrapElement(item, wrappingElementTag) {
     item.insertAdjacentHTML('beforebegin', wrappingElementTag);
-    let wrappingElement = item.previousElementSibling;
+    const wrappingElement = item.previousElementSibling;
     wrappingElement.appendChild(item);
 }
 
-function setAttribute(attributeName, attributeValue) {
-    this.setAttribute(attributeName, attributeValue);
-}
-
-function addCssStyle(element, styleName, styleValue) {
+function addStyle(element, styleName, styleValue) {
     const styles = element.style;   
     styles[styleName] = styleValue;
 }
 
 function isString(value) {
-    return typeof value === 'string' ? true : false;
+    return typeof value === 'string' ;
 }
 
 function isObject(value) {
-    return typeof value === 'object' ? true : false;
+    return typeof value === 'object' ;
 }
 
 function isFunction(value) {
-    return typeof value === 'function' ? true : false;
+    return typeof value === 'function';
 }
 
 function getStringOrFunctionValue(value){
